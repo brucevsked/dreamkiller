@@ -1,0 +1,99 @@
+<!DOCTYPE HTML>
+<html lang="zh">
+<head>
+<!-- must set here! -->
+<base href="">
+
+<title>1年级语文</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- 使用 viewport meta 标签在手机浏览器上控制布局 -->
+<meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+<!-- 全屏模式,不显示工具栏和菜单栏 -->
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<!-- 关闭iphone电话号码链接 -->
+<meta name="format-detection" content="telephone=no" />
+
+</head>
+
+<body>
+
+<div id="lessonListDiv"></div> <br/>
+<div id="rulerListDiv"></div>  <br/>
+<h1><div id="lessonContentDiv">测试内容</div></h1>
+
+
+<script src="js/jquery.min.js"></script>
+<script>
+'use strict'
+
+$(function(){
+	console.log("application start");
+	chinese1up.initUI();
+});
+
+//课程
+var course=new Object({
+	//TODO 1
+});
+
+var chinese1up=new Object({
+	fontSize:20,
+	curLesson:1,
+	curText:"",
+	/**
+	*课程列表
+	*课程标题，课程作者，授课老师
+	*/
+	lessons:[
+		"第1课 abcdefghijklmnopqrstuvwxyz",
+		"第2课 abcdefghijklmnopqrstuvwxyz",
+		"第3课 abcdefghijklmnopqrstuvwxyz",
+		"第4课 abcdefghijklmnopqrstuvwxyz",
+		"第5课 abcdefghijklmnopqrstuvwxyz"
+	],
+	ruler1:function(lessonIndex){
+		$("#lessonContentDiv").html(chinese1up.lessons[lessonIndex]);
+	},
+	ruler2:function(lessonIndex){
+		var oldContentArray=chinese1up.lessons[lessonIndex].split("");
+		//console.log(oldContentArray);
+		$("#lessonContentDiv").html(oldContentArray.reverse().toString());
+
+	},
+	ruler3:function(lessonIndex){
+		var oldContentArray=chinese1up.lessons[lessonIndex].split("");
+		//console.log(oldContentArray);
+		$("#lessonContentDiv").html(oldContentArray.reverse().toString());
+	},
+	getRandom:function(min,max){
+		return Math.floor(Math.random() * (max - min)) + min;
+	},
+	initRulerList:function(lessonIndex){
+		console.log(lessonIndex);
+		var buttonList="";
+		buttonList+="<button type='button' name='ruler1Btn' onclick='chinese1up.ruler1("+lessonIndex+")' >规则1：正序</button>"+"<br/><br/>";
+		buttonList+="<button type='button' name='ruler2Btn' onclick='chinese1up.ruler2("+lessonIndex+")' >规则2：倒序</button>"+"<br/><br/>";
+		buttonList+="<button type='button' name='ruler3Btn' onclick='chinese1up.ruler3("+lessonIndex+")' >规则1：正序</button>"+"<br/><br/>";
+
+		$("#rulerListDiv").html(buttonList);
+	},
+	initUI:function(){
+		var buttonList="";
+		for(var lessonIndex=0;lessonIndex<chinese1up.lessons.length;lessonIndex++){
+			//console.log(lessonIndex);
+			buttonList+="<button type='button' name='lessonBtn' onclick='chinese1up.initRulerList("+lessonIndex+")' >第"+(lessonIndex+1)+"课</button>"+"&nbsp;&nbsp;&nbsp;&nbsp;";
+		}
+
+		$("#lessonListDiv").html(buttonList);
+
+	}
+
+});
+
+
+
+
+</script>
+
+</body>
+</html>
