@@ -19,7 +19,7 @@
 
 <div id="lessonListDiv"></div> <br/>
 <div id="rulerListDiv"></div>  <br/>
-<h1><div id="lessonContentDiv">测试内容</div></h1>
+<h1><font color=red><div id="lessonContentDiv">测试内容</div></font></h1>
 
 
 <script src="js/jquery.min.js"></script>
@@ -45,7 +45,7 @@ var chinese1up=new Object({
 	*课程标题，课程作者，授课老师
 	*/
 	lessons:[
-		"第1课 abcdefghijklmnopqrstuvwxyz",
+		"我上学了，我是中国人。我是小学生，上学歌。太阳当空照，花儿对我笑。小鸟说早早早，你为什么背上小书包？我去上学校，天天不迟到。爱学习。爱劳动，长大要为祖国立功劳。我爱学语文，读书，写字，讲故事，听故事。",
 		"第2课 abcdefghijklmnopqrstuvwxyz",
 		"第3课 abcdefghijklmnopqrstuvwxyz",
 		"第4课 abcdefghijklmnopqrstuvwxyz",
@@ -61,9 +61,22 @@ var chinese1up=new Object({
 
 	},
 	ruler3:function(lessonIndex){
-		var oldContentArray=chinese1up.lessons[lessonIndex].split("");
+		var oldContentArray=chinese1up.lessons[lessonIndex];
+		var flag=true;
+		var result="";
+		while(flag){
+			console.log(oldContentArray.length);
+			if(oldContentArray.length==1){
+				flag=false;
+			}
+			var curIndex=chinese1up.getRandom(0,oldContentArray.length-1);
+			console.log('random:'+curIndex+"|"+oldContentArray.charAt(curIndex));
+			result+=oldContentArray.charAt(curIndex);
+			console.log("before:"+oldContentArray.substring(0,curIndex)+"|after:"+oldContentArray.substring(curIndex+1));
+			oldContentArray=oldContentArray.substring(0,curIndex)+oldContentArray.substring(curIndex+1);
+		}
 		//console.log(oldContentArray);
-		$("#lessonContentDiv").html(oldContentArray.reverse().toString());
+		$("#lessonContentDiv").html(result);
 	},
 	getRandom:function(min,max){
 		return Math.floor(Math.random() * (max - min)) + min;
@@ -73,7 +86,7 @@ var chinese1up=new Object({
 		var buttonList="";
 		buttonList+="<button type='button' name='ruler1Btn' onclick='chinese1up.ruler1("+lessonIndex+")' >规则1：正序</button>"+"<br/><br/>";
 		buttonList+="<button type='button' name='ruler2Btn' onclick='chinese1up.ruler2("+lessonIndex+")' >规则2：倒序</button>"+"<br/><br/>";
-		buttonList+="<button type='button' name='ruler3Btn' onclick='chinese1up.ruler3("+lessonIndex+")' >规则1：正序</button>"+"<br/><br/>";
+		buttonList+="<button type='button' name='ruler3Btn' onclick='chinese1up.ruler3("+lessonIndex+")' >规则3：随机</button>"+"<br/><br/>";
 
 		$("#rulerListDiv").html(buttonList);
 	},
