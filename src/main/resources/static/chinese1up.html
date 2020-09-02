@@ -18,9 +18,12 @@
 <body style="background-color: black;">
 
 <font id="myFont2" color="#66CCCC">小提示：在电脑端或手机端可以通过乐播投屏软件投到电视上</font>
+<button id="addFontSizeBtn1" type="button">字号加</button>
+<button id="subFontSizeBtn1" type="button">字号减</button>
+<button id="defFontSizeBtn1" type="button">原字号</button>
 <div id="lessonListDiv"></div> <br/>
 <div id="rulerListDiv"></div>  <br/>
-<h1><font id="myFont" color="#66CCCC"><div id="lessonContentDiv">测试内容</div></font></h1>
+<font id="myFont" color="#66CCCC" style="font-size: 3em;"><div id="lessonContentDiv">测试内容</div></font>
 
 
 <script src="js/jquery.min.js"></script>
@@ -39,9 +42,21 @@ var course=new Object({
 
 var chinese1up=new Object({
 intervalTime:1000*60*6,//换色间隔时间1000=1秒，默认6分钟换一次
-	colors:["#FFB6C1","#FFC0CB","#DC143C","#FFF0F5","#DB7093","#FF69B4","#FF1493","#C71585","#DA70D6","#D8BFD8","#DDA0DD","#EE82EE"],
-	fontSize:20,
+	colors:["#A51423","#D11D1C","#EB2F12","#F33E09","#FFA918","#F2CC09","#F0DB0E","#EFE94A","#FFFFFF",
+	        "#2A629B","#2876CA","#399CE4","#697E45","#1E4743","#1A5E5F","#1D4C46","#1E7646","#40CB34",
+			"#FFA32A","#9E2A3F","#8F5BB5","#4C2449","#3F2F2F","#312765","#2B2646","#312B4F","#2F2D8E",
+			"#2B2E33","#69686E","#5A4C3F","#684130","#A1683D","#9A3F20","#702C2A","#B13327","#D9AA38"
+		   ],
+	symbols:["，","。","、","？","：","；","——","“","”","！","（","）","……","|"],
+	mixed1:["😊","😉","😂","🤣","❤","🤩","😎","😙","😛","😴",
+	        "🐵","🐶","🐺","🐱","🦁","🐯","🦒","🦊","🦝","🐮",
+	        "🐷","🐗","🐭","🐹","🐰","🐻","🐨","🐼","🐸","🦓"
+	       ],
+	fontSize:3,
+	defaultFontSize:3,
 	curLesson:1,
+	curWord:0, //当前第几个字
+	totalWord:0,//总计字(包括标点符号)
 	curText:"",
 	/**
 	*课程列表
@@ -52,39 +67,56 @@ intervalTime:1000*60*6,//换色间隔时间1000=1秒，默认6分钟换一次
 		"第2课 abcdefghijklmnopqrstuvwxyz",
 		"第3课 abcdefghijklmnopqrstuvwxyz",
 		"第4课 abcdefghijklmnopqrstuvwxyz",
-		"第5课 abcdefghijklmnopqrstuvwxyz"
+        "第5课 abcdefghijklmnopqrstuvwxyz",
+        "第6课 abcdefghijklmnopqrstuvwxyz",
+		"第7课abc"
 	],
 	ruler1:function(lessonIndex){
+		//正序
 		$("#lessonContentDiv").html(chinese1up.lessons[lessonIndex]);
 	},
 	ruler2:function(lessonIndex){
-		var oldContentArray=chinese1up.lessons[lessonIndex].split("");
-		var result="";
-		var curArray=oldContentArray.reverse();
-		for(var i=0;i<curArray.length;i++){
-			result+=curArray[i];
-		}
+		//倒序
+		var oldContentArray=chinese1up.lessons[lessonIndex];
+		var result=chinese1up.reverseString(oldContentArray);
 		//console.log(oldContentArray);
 		$("#lessonContentDiv").html(result);
 
 	},
 	ruler3:function(lessonIndex){
-		var oldContentArray=chinese1up.lessons[lessonIndex];
+		//随机
+		var oldContentStr=chinese1up.lessons[lessonIndex];
+		var result=chinese1up.randomString(oldContentStr);
+		//console.log(oldContentArray);
+		$("#lessonContentDiv").html(result);
+	},
+	reverseString:function(str){
+		//字符转倒序
+		var result="";
+		var oldContentArray=str.split("");
+		var curArray=oldContentArray.reverse();
+		for(var i=0;i<curArray.length;i++){
+			result+=curArray[i];
+		}
+		return result;
+	},
+	randomString:function(str){
+		//字符串转随机
+		var oldContentArray=str;
 		var flag=true;
 		var result="";
 		while(flag){
-			console.log(oldContentArray.length);
+			//console.log(oldContentArray.length);
 			if(oldContentArray.length==1){
 				flag=false;
 			}
 			var curIndex=chinese1up.getRandom(0,oldContentArray.length-1);
-			console.log('random:'+curIndex+"|"+oldContentArray.charAt(curIndex));
+			//console.log('random:'+curIndex+"|"+oldContentArray.charAt(curIndex));
 			result+=oldContentArray.charAt(curIndex);
-			console.log("before:"+oldContentArray.substring(0,curIndex)+"|after:"+oldContentArray.substring(curIndex+1));
+			//console.log("before:"+oldContentArray.substring(0,curIndex)+"|after:"+oldContentArray.substring(curIndex+1));
 			oldContentArray=oldContentArray.substring(0,curIndex)+oldContentArray.substring(curIndex+1);
 		}
-		//console.log(oldContentArray);
-		$("#lessonContentDiv").html(result);
+		return result;
 	},
 	getRandom:function(min,max){
 		return Math.floor(Math.random() * (max - min)) + min;
@@ -94,12 +126,34 @@ intervalTime:1000*60*6,//换色间隔时间1000=1秒，默认6分钟换一次
 			$("#myFont").css("color",chinese1up.colors[chinese1up.getRandom(0,chinese1up.colors.length)]);
 		},chinese1up.intervalTime);
 	},
+	previousEvt1:function(){
+
+	},
+	nextEvt1:function(){
+
+	},
+	addFontSize:function(){
+		chinese1up.fontSize=chinese1up.fontSize+1;
+		chinese1up.setFontSize();
+	},
+	subFontSize:function(){
+		var curSize=chinese1up.fontSize-1;
+		chinese1up.fontSize=(curSize<=1)?1:curSize;
+		chinese1up.setFontSize();
+    },
+	defFontSize:function(){
+		chinese1up.fontSize=chinese1up.defaultFontSize;
+		chinese1up.setFontSize();
+	},
+	setFontSize:function(){
+		$("#myFont").css("font-size",chinese1up.fontSize+"em");
+	},
 	initRulerList:function(lessonIndex){
 		console.log(lessonIndex);
 		var buttonList="";
-		buttonList+="<button type='button' name='ruler1Btn' onclick='chinese1up.ruler1("+lessonIndex+")' >规则1：正序</button>"+"<br/><br/>";
-		buttonList+="<button type='button' name='ruler2Btn' onclick='chinese1up.ruler2("+lessonIndex+")' >规则2：倒序</button>"+"<br/><br/>";
-		buttonList+="<button type='button' name='ruler3Btn' onclick='chinese1up.ruler3("+lessonIndex+")' >规则3：随机</button>"+"<br/><br/>";
+		buttonList+="<button type='button' name='ruler1Btn' onclick='chinese1up.ruler1("+lessonIndex+")' >规则1：正序</button>"+"&nbsp; &nbsp;";
+		buttonList+="<button type='button' name='ruler2Btn' onclick='chinese1up.ruler2("+lessonIndex+")' >规则2：倒序</button>"+"&nbsp; &nbsp;";
+		buttonList+="<button type='button' name='ruler3Btn' onclick='chinese1up.ruler3("+lessonIndex+")' >规则3：随机</button>"+"&nbsp; &nbsp;";
 
 		$("#rulerListDiv").html(buttonList);
 	},
@@ -115,6 +169,10 @@ intervalTime:1000*60*6,//换色间隔时间1000=1秒，默认6分钟换一次
 		chinese1up.setFontColor();
 
 		$("#myFont").css("color",chinese1up.colors[chinese1up.getRandom(0,chinese1up.colors.length)]);
+
+		$("#addFontSizeBtn1").on("click",chinese1up.addFontSize);
+		$("#subFontSizeBtn1").on("click",chinese1up.subFontSize);
+		$("#defFontSizeBtn1").on("click",chinese1up.defFontSize);
 
 	}
 
