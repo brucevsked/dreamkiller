@@ -255,7 +255,8 @@ intervalTime:1000*60*2,//换色间隔时间1000=1秒，默认6分钟换一次
 		$("#lessonContentDiv").html(chinese1up.curText.charAt(chinese1up.curWord));
 	},
 	firstEvt1:function(lessonIndex){
-		$("#lessonContentDiv").html(chinese1up.curText.charAt(0));
+		chinese1up.curWord=0;
+		$("#lessonContentDiv").html(chinese1up.curText.charAt(chinese1up.curWord));		
 	},
 	addFontSize:function(){		
 		chinese1up.fontSize=chinese1up.fontSize+1;
